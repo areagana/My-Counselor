@@ -166,7 +166,7 @@ function schedules(data)
     var date = new Date();
     var schedule ;
     var time;
-    var list = "";
+    var list ='';
     var hours;
     var mins;
     var previous="";
@@ -182,77 +182,101 @@ function schedules(data)
     var active ="";
     var end_date;
     var duration;
+    var current_month;
 
-    $.each(data.upcoming,function(index,fetched){
-        schedule = new Date(fetched.date);
-        if( schedule > date)
-        {
-            date = new Date();
-            schedule = new Date(fetched.date);
-            end_date = new Date(fetched.end_time);
-            hours= schedule.getHours();
-            mins = schedule.getMinutes();
-            time = hours+":"+mins+" Hrs";
-            timediff = schedule - date;
-            other_days = schedule.getDate();
-            day = date.getDate();
-            month = schedule.getMonth();
-            year = schedule.getFullYear();
-            duration = end_date - schedule;
-            duration = duration / 60000;
-            duration = Math.round(duration);
+    if(data.upcoming!="")
+    {
 
-            // convert duration into minutes and hours
-            if(duration > 59)
-            {
-                duration = duration / 60;
-                duration = Math.round(duration)+" Hr";
-            }else if(duration < 0){
-                duration = "UnKnown";
-            }else{
-                duration = duration+" mins";
-            }
-
-            if(other_days > day)
-            {
-                date = new Date(fetched.date);
-                list += "<div class='p-2 my-1 header upcoming-link'>"+fetched.name+""+
-                                " <span class='text-muted right'> Duration: "+duration+"</span><br>"+
-                                " <span class='text-muted'>("+fetched.topic+")</span> "+
-                                "<span class='text-muted right'>"+date+"</span>"+
-                            "</div>";   
-            }else if(other_days === day)
-            {
-                time = schedule - date;
-                timediff = schedule - date;
-                minutes = timediff / 60000;
-                minutes = Math.round(minutes);
-                // check if minutes is greater that 59 and convert to hours
-                if(minutes > 59)
+            $.each(data.upcoming,function(index,fetched){ // upcoming schedules
+                schedule = new Date(fetched.date);
+                if(schedule > date) // if their date and time is not yet
                 {
-                    minutes = minutes / 60;
-                    minutes = Math.round(minutes)+" Hrs";
-                }else{
-                    minutes = minutes+" Mins";
-                }
+                    date = new Date();
+                    schedule = new Date(fetched.date);
+                    end_date = new Date(fetched.end_time);
+                    hours= schedule.getHours();
+                    mins = schedule.getMinutes();
+                    time = hours+":"+mins+" Hrs";
+                    timediff = schedule - date;
+                    other_days = schedule.getDate();
+                    day = date.getDate();
+                    month = schedule.getMonth() + 1;
+                    year = schedule.getFullYear();
+                    duration = end_date - schedule;
+                    duration = duration / 60000;
+                    duration = Math.round(duration);
+                    current_month = date.getMonth() + 1;
 
-                list += "<div class='p-2 header active-schedule mt-2'>"+fetched.name+
-                        ", <span class='text-muted'> Duration: "+duration+"</span>"+
-                        " <span class='text-muted right text-danger'>"+minutes+"</span>"+
-                        " <span class='text-muted'>("+fetched.topic+")</span></div>";
-                
-                                // display the notification
-                if(minutes < 30){
-                    $('.schedules-top').show();
-                    $('#schedules').html(list);
-                }else{
-                    $('.schedules-top').hide();
+                    // show the schedule
+                    //console.log(other_days);
+                    //console.log(day);
+                    // convert duration into minutes and hours
+                    if(duration > 59)
+                    {
+                        duration = duration / 60;
+                        duration = Math.round(duration)+" Hr";
+                    }else if(duration < 0){
+                        duration = "UnKnown";
+                    }else{
+                        duration = duration+" mins";
+                    }
+
+                    //check the chedule month
+                    if(month >= current_month)
+                    {
+                        if(other_days < day) // if the days of the month for the upcoming are below the days for the current mont
+                        {
+                                date = new Date(fetched.date);
+                                list += "<div class='p-3 my-1 header upcoming-link'>"+fetched.name+""+
+                                            " <span class='text-muted right'> Duration: "+duration+"</span><br>"+
+                                            " <span class='text-muted'>("+fetched.topic+")</span> "+
+                                            "<span class='text-muted right'>"+date+"</span>"+
+                                        "</div>";  
+                        }else if(other_days > day){
+                            date = new Date(fetched.date);
+                                list += "<div class='p-3 my-1 header upcoming-link'>"+fetched.name+""+
+                                            " <span class='text-muted right'> Duration: "+duration+"</span><br>"+
+                                            " <span class='text-muted'>("+fetched.topic+")</span> "+
+                                            "<span class='text-muted right'>"+date+"</span>"+
+                                        "</div>";  
+                        }else if(other_days === day)
+                        {
+                            time = schedule - date;
+                            timediff = schedule - date;
+                            minutes = timediff / 60000;
+                            minutes = Math.round(minutes);
+                            // check if minutes is greater that 59 and convert to hours
+                            if(minutes > 59)
+                            {
+                                minutes = minutes / 60;
+                                minutes = Math.round(minutes)+" Hrs";
+                            }else{
+                                minutes = minutes+" Mins";
+                            }
+
+                            list += "<div class='p-2 header active-schedule mt-2'>"+fetched.name+
+                                    ", <span class='text-muted'> Duration: "+duration+"</span>"+
+                                    " <span class='text-muted right text-danger'>"+minutes+"</span>"+
+                                    " <span class='text-muted'>("+fetched.topic+")</span></div>";
+                            
+                                            // display the notification
+                            if(minutes < 30){
+                                $('.schedules-top').show();
+                                $('#schedules').html(list);
+                            }else{
+                                $('.schedules-top').hide();
+                            }
+                        } 
+                    } 
                 }
-            }
-            
+            });// end each function for upcoming schedules
+        }else{ // if the upcoming schedules array is empty
+            list +='<li class="list-group-item"><h4><i>No Schedules Available</i></h4></li>';
         }
-    });// end each function for upcoming schedules
 
+        $('#upcoming-schedules').html(list);
+        $('.home-dash-schedules').html(list);
+        //console.log(list);
     /**
      * start each function for ended schedules
      */
@@ -349,9 +373,8 @@ function schedules(data)
                 //$('.schedules-top-active').hide();        
         });// end each function
     $('#schedules-active').html(active);
-    $('#upcoming-schedules').html(list);
-    $('.home-dash-schedules').html(list);
     $('#previous-schedules').html(previous);
+    
 }
 
 $(document).on('click','#close-notification',function(){
