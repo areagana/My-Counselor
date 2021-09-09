@@ -23,6 +23,7 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('/profile', 'ProfileController@profile')->name('profile');
 Route::post('/profile/update', 'ProfileController@profileUpdate')->name('profile.update');
 Route::post('/profile/{id}/update', 'ImageController@UserProfileImageUpdate')->name('profileImage.update');
+Route::get('/profile/passwordchange', 'ProfileController@passwordChange')->name('passwordchange');
 
 // users routes
 Route::get('/users','HomeController@users')->name('users');
@@ -86,6 +87,7 @@ Route::get('/records','RecordController@index')->name('records');
 Route::get('/search','AjaxController@search')->name('search');
 Route::get('/search/client','AjaxController@searchClient')->name('searchClient');
 Route::get('/schedules/get','AjaxController@schedules')->name('schedules');
+Route::get('/password/check','AjaxController@passwordCheck')->name('passwordcheck');
 
 //images controller routes
 Route::prefix('profile_image_url')->group(function () {

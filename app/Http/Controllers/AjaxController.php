@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use App\Models\Client;
 use App\Models\Category;
 use App\Models\Issue;
@@ -65,6 +66,24 @@ class AjaxController extends Controller
                                         ->get();
                                   
             return response()->json(['upcoming'=>$schedules,'previous'=>$previous_schedules]);
+        }
+    }
+
+    /**
+     * check password of the user
+     */
+    public function passwordCheck(Request $request)
+    {
+        if($request->ajax())
+        {
+            $password = $request->password;
+            $password = Hash($password);
+            // query
+            /*$resp = User::where('id',Auth::user()->id)
+                        ->where('password',$password)
+                        ->get();
+            return response()->json(['response'=>$resp]);*/
+            return $password;
         }
     }
 

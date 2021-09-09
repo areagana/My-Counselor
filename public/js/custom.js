@@ -422,3 +422,39 @@ $(document).on('mouseup',function(e)
 $(document).on('focus','.new-doc-btn',function(){
     $('.new-doc-form').show();
 });
+
+
+/**
+ * resetting use password when logged in
+ */
+
+$(document).on('blur','#current-password',function(){
+    var password = $(this).val();
+    if(password !='')
+    {
+       /**
+        * send an ajax call to check for the correctness of the password entered
+        */
+
+       $.ajax({
+        url:'/password/check',
+        data:{
+            password:password
+        },
+        dataType:'json',
+        success:function(res){
+            console.log(res);
+            if(res !='')
+            {
+                $('.password-message').html('<h4 class="text-success"><i>Password is correct</i></h4>');
+            }else{
+                $('.password-message').html('<h4 class="text-success"><i>Wrong password entered</i></h4>');
+            }
+        }
+       });
+
+    }else{
+        alert('please enter your current password');
+    }
+    
+});

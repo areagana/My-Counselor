@@ -33,4 +33,12 @@ class ProfileController extends Controller
         $user->save();
         return redirect('/profile')->with('success','Profile Updated Successfully');
     }
+
+    /**
+     * update user password
+     */
+    public function passwordChange()
+    {
+        return view('passwords.reset');
+    }
 }
