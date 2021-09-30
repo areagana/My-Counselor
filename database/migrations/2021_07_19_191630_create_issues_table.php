@@ -19,7 +19,7 @@ class CreateIssuesTable extends Migration
             $table->integer('user_id');
             $table->integer('category_id');
             $table->string('issue_title');
-            $table->text('issue_details');
+            $table->longText('issue_details');
             $table->string('status')->nullable();
             $table->timestamps();
         });

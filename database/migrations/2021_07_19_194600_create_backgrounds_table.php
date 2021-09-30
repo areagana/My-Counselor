@@ -19,7 +19,7 @@ class CreateBackgroundsTable extends Migration
             $table->string('alcohol');
             $table->string('drugs');
             $table->string('torture');
-            $table->string('others')->nullable();
+            $table->longText('others')->nullable();
             $table->timestamps();
         });
     }

@@ -20,9 +20,9 @@ class CreateRecordsTable extends Migration
             $table->integer('issue_id');
             $table->integer('schedule_id');
             $table->string('category_id');
-            $table->string('shared_info')->nullable();
-            $table->string('resolution')->nullable();
-            $table->string('progress')->nullable();
+            $table->longText('shared_info')->nullable();
+            $table->longText('resolution')->nullable();
+            $table->longText('progress')->nullable();
             $table->timestamps();
         });
     }
