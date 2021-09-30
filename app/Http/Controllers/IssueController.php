@@ -14,7 +14,7 @@ class IssueController extends Controller
      */
     public function __construct()
     {
-        return $this->middleware('auth');
+        $this->middleware(['auth','role:superadministrator|counsellor']);
     }
     
     /**
