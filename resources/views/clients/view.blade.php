@@ -104,7 +104,7 @@
                                 <div class="p-2">
                                     {{$record->shared_info}}
                                     <span class="right">
-                                        {{date_format(date_create($record->created_at),'D jS y')}}
+                                        {{date_format(date_create($record->created_at),'D jS M y')}}
                                     </span>
                                 </div>
                             @endforeach
@@ -116,7 +116,7 @@
                                 <input type="hidden" name='issue_id' value="{{session('issue_select')->id}}">
                             <div class="form-group">
                                 <label for="" class="form-label">Key points</label>
-                                <textarea type="text" class="form-control" name='issue_details'></textarea>
+                                <textarea type="text" class="form-control" name='issue_details' id='new-record-text'></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="" class="form-label">Progress</label>
@@ -148,7 +148,7 @@
                         <li class="custom-list" data-toggle='modal' data-target='#form-record{{$record->id}}'>
                             {{$record->shared_info}}
                             <span class="right">
-                            {{date_format(date_create($record->created_at),'D jS y')}}
+                            {{date_format(date_create($record->created_at),'D jS M y')}}
                             </span>
             <!-- modal to update the records entered-->
                         </li>

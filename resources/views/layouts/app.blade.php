@@ -47,9 +47,11 @@
                         <li class="nav-item">
                             <a href="/schedule" class="nav-link">Schedules</a>
                         </li>
+                        @if(Auth::user()->hasRole('superadministrator'))
                         <li class="nav-item">
                             <a href="/users" class="nav-link">Users</a>
                         </li>
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -138,5 +140,10 @@
             @yield('content')
         </main>
     </div>
+<!-- ckeditor script-->
+    <script src="//cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace( 'new-record-text' );
+    </script>
 </body>
 </html>

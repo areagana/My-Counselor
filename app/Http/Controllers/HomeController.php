@@ -40,7 +40,12 @@ class HomeController extends Controller
     
     public function users()
     {
-        $users = User::all();
-        return view('users.create',compact('users'));
+        if(Auth::user()->hasRole('superadministrator'))
+        {
+            $users = User::all();
+            return view('users.create',compact('users'));
+        }else{
+            return redirect()->back();
+        }
     }
 }
