@@ -33,7 +33,6 @@ class DocumentController extends Controller
             // move file to the file folde
             if($file->move('Documents',$fileName))
             {
-                $document->category_id = $id;
                 $document->client_id = $request->input('client_id');
                 $document->category_id = $id;
                 $document->document_title = $request->input('document_title');

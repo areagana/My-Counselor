@@ -5,7 +5,11 @@
 @section('content')
     <div class="container">
         <div class="bg-white p-2 shadow-sm">
-            <h3 class="header">Records</h3>
+            <h3 class="header">Records
+                <span class="right">
+                    <input type="text" class="form-control form-control-sm" id='searchRecord' onkeyup="" placeholder='Search...'>
+                </span>
+            </h3>
             <div class="p-2">
                 @foreach($records as $record)
                     <div class="p-2 header records-display" data-toggle='collapse' href='#record_{{$record->id}}'>
