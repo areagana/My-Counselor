@@ -26,4 +26,10 @@ class Issue extends Model
     {
         return $this->hasMany(Record::class);
     }
+
+    //user 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

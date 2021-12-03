@@ -146,7 +146,7 @@
                     <h5 class="header">Recent Records</h5>
                     @foreach($client->records as $record)
                         <li class="custom-list" data-toggle='modal' data-target='#form-record{{$record->id}}'>
-                            {{$record->shared_info}}
+                            {!!$record->shared_info!!}
                             <span class="right">
                             {{date_format(date_create($record->created_at),'D jS M y')}}
                             </span>
@@ -165,11 +165,11 @@
                                                 <div class="form-group">
                                                     <input type="hidden" name='client_id' value='{{$client->id}}'>
                                                     <label for="shared_info" class="form-label">Key Points</label>
-                                                    <textarea name="shared_info" id="shared_info" cols="50" rows="3" class="custom-input" value='{{$record->shared_info}}'>{{$record->shared_info}}</textarea>
+                                                    <textarea name="shared_info" id="shared_info" cols="50" rows="3" class="custom-input" value='{!!$record->shared_info!!}'>{!! $record->shared_info !!}</textarea>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="progress" class="form-label">Progress</label>
-                                                    <textarea name="progress" id="progress" cols="50" rows="3" class="custom-input" value='{{$record->progress}}'>{{$record->progress}}</textarea>
+                                                    <textarea name="progress" id="progress" cols="50" rows="3" class="custom-input" value='{!!$record->progress!!}'>{!! $record->progress !!}</textarea>
                                                 </div>
                                             </form>
                                         </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Client;
 use App\Models\Issue;
+use App\Models\Category;
 
 use Illuminate\Http\Request;
 
@@ -65,9 +66,75 @@ class IssueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function fetchIssues(Request $request)
     {
-        //
+        if($request->ajax())
+        {
+            $user = Auth::user();
+            $date1 = $request->date1;
+            $date2 = $request->date2;
+            $id = $request->id;
+            $status = $request->status;
+
+        // dates are selected and no id selected/no category selected
+            if($date1 && $date1 && !$id){ // works well
+                if($status)
+                {
+                    $issues = Issue::whereDate('created_at','>=',$date1)
+                                    ->whereDate('created_at','<=',$date2)
+                                    ->where('status',$status)
+                                    ->where('user_id',$user->id)
+                                    ->get();
+                }else{
+              
+                    $issues = Issue::whereDate('created_at','>=',$date1)
+                                    ->whereDate('created_at','<=',$date2)
+                                    ->where('user_id',$user->id)
+                                    ->get();
+                }
+        // dates are selected and id is available
+            }elseif($id && !empty($date1) && !empty($date2)){
+                $category = Category::find($id);
+                if($status){
+                    $issues = $category->issues()->whereDate('created_at','>=',$date1)
+                                             ->whereDate('created_at','<=',$date2)
+                                             ->where('status',$status)
+                                             ->where('user_id',$user->id)
+                                             ->get();
+                }else{
+
+                    $issues = $category->issues()->whereDate('created_at','>=',$date1)
+                                                ->whereDate('created_at','<=',$date2)
+                                                ->where('user_id',$user->id)
+                                                ->get();
+                }
+        // no dates selected // fetches well
+            }elseif($status && !$id){
+
+                $issues = Issue::where('status',$status)->get();
+            }else{
+                $category = Category::find($id);
+                if($status){
+                    $issues = $category->issues()->where('status',$status)->get();
+                }else{
+                    $issues = $category->issues;
+                }
+            }
+
+            $clients =[];
+            $records =[];
+
+            foreach($issues as $issue)
+            {
+                $clients[] = $issue->client;
+                $records[] = $issue->records;
+            }
+
+            /**
+             * return a response with the data
+             */
+            return response()->json(['issues'=>$issues,'clients'=>$clients]);
+        }
     }
 
     /**
