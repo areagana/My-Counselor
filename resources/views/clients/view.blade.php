@@ -102,7 +102,7 @@
                             <h5 class='header'>Notes</h5>
                             @foreach(session('issue_select')->records as $record)
                                 <div class="p-2">
-                                    {{$record->shared_info}}
+                                    {!! $record->shared_info !!}
                                     <span class="right">
                                         {{date_format(date_create($record->created_at),'D jS M y')}}
                                     </span>
