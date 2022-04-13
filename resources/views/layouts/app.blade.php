@@ -144,11 +144,7 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ asset('js/custom.js') }}" defer></script>
     <script src="//cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
-<<<<<<< HEAD
     <script src="{{ asset('ckeditor/ckeditor.js') }}" defer></script>
-=======
-    <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
->>>>>>> ada851cdef86fb5bee7c893ab6d0c739d5cc6f62
     <script>
         CKEDITOR.replace( 'new-record-text' );
 
