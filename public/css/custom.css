@@ -196,3 +196,6 @@ body{
 .profile-circle{
     border-radius:50%;
 }
+.records-display:hover{
+    background-color: cadetblue;
+}
