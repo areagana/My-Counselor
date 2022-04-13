@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Client;
 use App\Models\Schedule;
 use App\Models\Issue;
@@ -47,5 +48,19 @@ class HomeController extends Controller
         }else{
             return redirect()->back();
         }
+    }
+
+    /**
+     * function to generate reports 
+     */
+    public function reports()
+    {
+        $user = Auth::user();
+        $issues = $user->issues;
+        $status = Issue::pluck('status')->toArray();
+        $statuses = array_unique($status);
+        $statuses = array_filter($statuses);
+        $categories = $user->categories;
+        return view('records.report',compact(['issues','categories','statuses']));
     }
 }

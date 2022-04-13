@@ -5,8 +5,12 @@
 @section('content')
     <div class="container">
         <div class="bg-white p-2 shadow-sm">
-            <h3 class="header">Records</h3>
-            <div class="p-2">
+            <h3 class="header">Records
+                <span class="right">
+                    <input type="text" class="form-control form-control-sm" id='searchRecord' onkeyup="SearchItemClass('searchRecord','all-records','records-display')" placeholder='Search...'>
+                </span>
+            </h3>
+            <div class="p-2" id='all-records'>
                 @foreach($records as $record)
                     <div class="p-2 header records-display" data-toggle='collapse' href='#record_{{$record->id}}'>
                         {{$record->client->name}} (<span class='text-muted'>{{$record->client->category->category_name}}</span>)
@@ -17,11 +21,11 @@
                     <div class="collapse p-2" id='record_{{$record->id}}'>
                         <p class="p-2">
                             <h5>Shared Info</h5>
-                            {{$record->shared_info}}
+                            {!!$record->shared_info!!}
                         </p>
                         <p class="p-2">
                             <h5>Resolution</h5>
-                            {{$record->resolution}}
+                            {!!$record->resolution!!}
                         </p>
                     </div>
                 @endforeach

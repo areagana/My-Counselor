@@ -9,10 +9,6 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-    <script src="{{ asset('js/custom.js') }}" defer></script>
-
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -46,6 +42,9 @@
                         </li>
                         <li class="nav-item">
                             <a href="/schedule" class="nav-link">Schedules</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/reports" class="nav-link">Reports</a>
                         </li>
                         @if(Auth::user()->hasRole('superadministrator'))
                         <li class="nav-item">
@@ -141,9 +140,222 @@
         </main>
     </div>
 <!-- ckeditor script-->
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/custom.js') }}" defer></script>
     <script src="//cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+    <script src="{{ asset('ckeditor/ckeditor.js') }}" defer></script>
     <script>
         CKEDITOR.replace( 'new-record-text' );
+
+        function checkDate(dat1,dat2)
+        {        
+            if(dat1 !='' && dat2 !='')
+            {
+                // call a function to load the data basing on what has been selected
+                if(dat1 > dat2){
+                    alert('Start date cannot be greater than end Date. Please check your date and try again.')
+                }else{
+                    fetchIssues(dat1,dat2)
+                }
+            }
+        }
+
+        // call a function to fetch data
+        function fetchIssues(dat1,dat2)
+        {
+            $.ajax({
+                url:'/issues/get',
+                data:{
+                    date1:dat1,
+                    date2:dat2
+                },
+                beforeSend:function(){
+                    $('.results').html("<div class='h4 p-4'><i><center>Loading...</center></i></div>");
+                },
+                success:function(res){
+                    var data ="";
+                    if(res.issues.length > 0){  
+                        $.each(res.issues,function(index,issue){
+                            data+= "<div class='border-bottom p-2'>"+issue.issue_title+
+                                "<span class='right'>"+issue.records.length+" records</span>"+
+                            "</div>";
+                        });
+                        $('.results').html(data);
+                    }else{
+                        $('.results').html("<div class='h4 p-4'><i><center>No data found</center></i></div>");
+                    }
+                },
+                error:function(error){
+                    $('.results').html("<div class='h4 p-4'><i><center>Error Loading requested data</center></i></div>");
+                }
+            });
+        }
+        
+        /**
+         * fetch data basing on the category selected
+         */
+        function fetchIssuesStatus(status)
+        {
+            var dat1 = $('#start_date').val();
+            var dat2 = $('#end_date').val();
+            var id = $('#category_name').val();
+            if(dat1 !='' && dat2 !='' && id !='')
+            {
+                $.ajax({
+                    url:'/issues/get',
+                    data:{
+                        date1:dat1,
+                        date2:dat2,
+                        id:id,
+                        status:status
+                    },
+                    beforeSend:function(){
+                        $('.results').html("<div class='h4 p-4'><i><center>Loading...</center></i></div>");
+                    },
+                    success:function(res){
+                        var data ="";
+                        if(res.issues.length > 0){                        
+                            $.each(res.issues,function(index,issue){
+                                data+= "<div class='border-bottom p-2'>"+issue.issue_title+
+                                    "<span class='right'>"+issue.records.length+" records</span>"+
+                                "</div>";
+                            });
+                            $('.results').html(data);
+                        }else{
+                            $('.results').html("<div class='h4 p-4'><i><center>No data found</center></i></div>");
+                        }
+                    },
+                    error:function(error){
+                        $('.results').html("<div class='h4 p-4'><i><center>Error Loading requested data</center></i></div>");
+                    }
+                });
+            }else if(id !='' && (dat1 =='' || dat2 =='')){
+                $.ajax({
+                    url:'/issues/get',
+                    data:{
+                        id:id,
+                        status:status
+                    },
+                    beforeSend:function(){
+                        $('.results').html("<div class='h4 p-4'><i><center>Loading...</center></i></div>");
+                    },
+                    success:function(res){
+                        var data ="";
+                        if(res.issues.length > 0){ 
+                            $.each(res.issues,function(index,issue){
+                                data+= "<div class='border-bottom p-2'>"+issue.issue_title+
+                                    "<span class='right'>"+issue.records.length+" records</span>"+
+                                "</div>";
+                            });
+                            $('.results').html(data);
+                        }else{
+                            $('.results').html("<div class='h4 p-4'><i><center>No data found</center></i></div>");
+                        }
+                    },
+                    error:function(error){
+                        $('.results').html("<div class='h4 p-4'><i><center>Error Loading requested data</center></i></div>");
+                    }
+                });
+               
+            }else{
+                $.ajax({
+                    url:'/issues/get',
+                    data:{
+                        status:status
+                    },
+                    beforeSend:function(){
+                        $('.results').html("<div class='h4 p-4'><i><center>Loading...</center></i></div>");
+                    },
+                    success:function(res){
+                        var data ="";
+                        if(res.issues.length > 0){ 
+                            $.each(res.issues,function(index,issue){
+                                data+= "<div class='border-bottom p-2'>"+issue.issue_title+
+                                    "<span class='right'>"+issue.records.length+" records</span>"+
+                                "</div>";
+                            });
+                            $('.results').html(data);
+                        }else{
+                            $('.results').html("<div class='h4 p-4'><i><center>No data found</center></i></div>");
+                        }
+                    },
+                    error:function(error){
+                        $('.results').html("<div class='h4 p-4'><i><center>Error Loading requested data</center></i></div>");
+                    }
+                });
+            }
+        }
+
+        /**
+         * fetch issues basing on issue title
+         */
+        function fetchIssuesCategory(id)
+        {
+            var dat1 = $('#start_date').val();
+            var dat2 = $('#end_date').val();
+            if(dat1 !='' && dat2 !='')
+            {
+                $.ajax({
+                    url:'/issues/get',
+                    data:{
+                        date1:dat1,
+                        date2:dat2,
+                        id:id
+                    },
+                    beforeSend:function(){
+                        $('.results').html("<div class='h4 p-4'><i><center>Loading...</center></i></div>");
+                    },
+                    success:function(res){
+                        var data ="";
+                        if(res.issues.lenth > 0){                        
+                            $.each(res.issues,function(index,issue){
+                                data+= "<div class='border-bottom p-2'>"+issue.issue_title+
+                                    "<span class='right'>"+issue.records.length+" records</span>"+
+                                "</div>";
+                            })
+                            $('.results').html(data);
+                        }else{
+                            $('.results').html("<div class='h4 p-4'><i><center>No data found</center></i></div>");
+                        }
+                    },
+                    error:function(error){
+                        $('.results').html("<div class='h4 p-4'><i><center>Error Loading requested data</center></i></div>");
+                    }
+                });
+            }else{
+                $.ajax({
+                    url:'/issues/get',
+                    data:{
+                        id:id
+                    },
+                    beforeSend:function(){
+                        $('.results').html("<div class='h4 p-4'><i><center>Loading...</center></i></div>");
+                    },
+                    success:function(res){
+                        var data ="";
+                            $.each(res.issues,function(index,issue){
+                                data+= "<div class='border-bottom p-2'>"+issue.issue_title+
+                                    "<span class='right'>"+issue.records.length+" records</span>"+
+                                "</div>";
+                            })
+                            $('.results').html(data);
+                    },
+                    error:function(error){
+                        $('.results').html("<div class='h4 p-4'><i><center>Error Loading requested data</center></i></div>");
+                    }
+                });
+            }
+        }
+
+        //SearchItemClass('searchRecord','all-records','records-display')
+        function SearchItemClass(id,id2,section)
+        {
+            var value = $('#'+id).val().toLowerCase();
+            $("#"+id2+" "+'.'+section).filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });     
+        }
     </script>
 </body>
 </html>

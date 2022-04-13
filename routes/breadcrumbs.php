@@ -42,6 +42,12 @@ Breadcrumbs::for('client.schedules', function ($trail,$client,$id) {
     $trail->push($client->name.' - schedules', route('client.schedules',$id));
 });
 
+//reports
+Breadcrumbs::for('reports', function ($trail) {
+    $trail->parent('home');
+    $trail->push('Reports', route('reports'));
+});
+
 
 
 

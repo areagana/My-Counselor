@@ -88,9 +88,15 @@ Route::get('/search','AjaxController@search')->name('search');
 Route::get('/search/client','AjaxController@searchClient')->name('searchClient');
 Route::get('/schedules/get','AjaxController@schedules')->name('schedules');
 Route::get('/password/check','AjaxController@passwordCheck')->name('passwordcheck');
+Route::get('/reports','HomeController@reports')->name('reports');
 
 //images controller routes
 Route::prefix('profile_image_url')->group(function () {
     Route::get('Client_profiles/{filename}','ImageController@ShowClientImage')
     ->name('ClientImage');
  });
+
+/**
+ * report data routes
+ */
+Route::get('/issues/get','IssueController@fetchIssues')->name('issues.find');
