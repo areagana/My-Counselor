@@ -682,3 +682,15 @@ $(document).on('blur','#current-password',function(){
                 });
             }
         }
+
+
+        // add background information to the students details
+        function AddBackgroundInfo()
+        {
+            var sect = $('#background-info');
+            var input = "<textarea name='more-info' rows='2' class='form-control my-2'></textarea>";
+            sect.append(input);
+
+            // show the save button
+            $('#save_button').show();
+        }

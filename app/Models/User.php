@@ -80,4 +80,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Issue::class);
     }
+
+    //connect to other infomation for the clients
+    public function otherinfos()
+    {
+        return $this->hasMany(Otherinfo::class);
+    }
 }

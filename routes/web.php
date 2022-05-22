@@ -41,6 +41,7 @@ Route::get('/clients/{id}/schedules','ClientController@schedules')->name('client
 // background routes
 Route::get('client/{id}/background/create','BackgroundController@create')->name('client.background');
 Route::post('client/background/store','BackgroundController@store')->name('background.store');
+Route::post('client/{id}/otherinfo/store','backgroundController@otherInfoStore')->name('backgroundInfo');
 
 //schedule routes
 Route::get('/schedule','ScheduleController@index')->name('schedule');
