@@ -71,7 +71,8 @@ class ClientController extends Controller
     {
         $client = Client::find($id);
         $backgrounds = $client->background();
-        return view('clients.view',compact(['client','backgrounds']));
+        $otherinfos = $client->otherinfos;
+        return view('clients.view',compact(['client','backgrounds','otherinfos']));
     }
 
     /**

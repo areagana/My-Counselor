@@ -21,7 +21,11 @@
                 <img src="{{asset('/images/man-with-question-01.png')}}" alt="Profile Photo" class='profile-image'></img>
             </div>
             <div class="col-md-9">
-                <h5 class="header">Background information</h5>
+                <h5 class="header p-3">Background information
+                    <span class="right">
+                        <button class="btn btn-sm btn-info" onclick="AddBackgroundInfo()"><i class="fa fa-plus"> Add Info</i></button>
+                    </span>
+                </h5>
                 <table class="table table-sm table-striped">
                     <thead class="custom-thead">
                         <tr>
@@ -43,8 +47,30 @@
                     </tbody>
                 </table>
                 <div class="p-2">
-                    
+                    @foreach($otherinfos as $info)
+                        <div class="p-2">
+                            {{$info->other_info}}
+                        </div>
+                    @endforeach
+
+                    <!-- form to hold textareas for more background information -->
+                    <form action="{{route('backgroundInfo',$client->id)}}" method='POST'>
+                        @csrf
+                        <div class="input-group" id='background-info'>
+                            <!-- Holds the textarea for the background information -->
+                        </div>
+                        <div class="form-row p-2">
+                            <div class="col p-2">
+                                <button class="btn btn-primary right btn-sm hidden" id='save_button'>Save Record</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>            
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col p-2" >
+
             </div>
         </div>
         <div class="row p-2">

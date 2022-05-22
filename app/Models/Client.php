@@ -47,4 +47,10 @@ class Client extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    // link client to other information
+    public function otherinfos()
+    {
+        return $this->hasMany(Otherinfo::class);
+    }
 }

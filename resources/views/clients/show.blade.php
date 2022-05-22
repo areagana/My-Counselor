@@ -14,6 +14,7 @@
         <div class="card">
             <div class="card-header">
                 <h3>My Clients
+                <input type="text" id="searchClient" class="form-control right" onkeyup="SearchItem('searchClient','myClients','tr')" placeholder='Search...'>
                     <span class="right">
                         <a href="/clients/create" class="nav-link btn btn-info btn-sm">
                             <i class="fa fa-plus-circle"></i> New Client
@@ -32,7 +33,7 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id='myClients'>
                          @foreach($clients as $client)
                             <tr>
                                 <td></td>

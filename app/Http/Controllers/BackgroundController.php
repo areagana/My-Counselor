@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Background;
 use App\Models\Client;
+use App\Models\Otherinfo;
+use App\Models\Background;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BackgroundController extends Controller
 {
@@ -59,6 +61,19 @@ class BackgroundController extends Controller
         return redirect('/clients')->with('success','New client created successfully');
     }
 
+    public function otherInfoStore(Request $request,$id)
+    {
+        $client = Client::find($id);
+        $info = new Otherinfo();
+
+        $info->client_id = $client->id;
+        $info->other_info = $request->input('more-info');
+        $info->category = $request->input('category');
+        $info->user_id = Auth::user()->id;
+        $info->save();
+        return redirect()->back();   
+        
+    }
     /**
      * Display the specified resource.
      *
