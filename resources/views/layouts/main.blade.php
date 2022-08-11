@@ -25,6 +25,5 @@
     <main class="py-2">
         @yield('content')
     </main>
-    @include('modals.modals')
 </body>
 </html>
