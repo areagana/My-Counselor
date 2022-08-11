@@ -32,4 +32,10 @@ class Record extends Model
     {
         return $this->belongsTo(Issue::class);
     }
+
+    // check topics
+    public function topic()
+    {
+        return $this->belongsToMany(IssueTopic::class);
+    }
 }

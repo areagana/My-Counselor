@@ -18,7 +18,8 @@ class CreateRecordsTable extends Migration
             $table->integer('user_id');
             $table->integer('client_id');
             $table->integer('issue_id');
-            $table->integer('schedule_id');
+            $table->integer('topic_id')->nullable();
+            $table->integer('schedule_id')->nullable();
             $table->string('category_id');
             $table->longText('shared_info')->nullable();
             $table->longText('resolution')->nullable();

@@ -32,4 +32,10 @@ class Issue extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    // topics 
+    public function topics()
+    {
+        return $this->hasMany(IssueTopic::class);
+    }
 }

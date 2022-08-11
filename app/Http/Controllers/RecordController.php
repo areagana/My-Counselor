@@ -40,6 +40,7 @@ class RecordController extends Controller
     {
         $records = new Record();
         $issue = Issue::find($id);
+        $topics = $issue->topics();
         $client_id = $issue->client_id;
         $title='new record';
         return redirect('/client/'.$client_id.'/view')->with(['title'=>$title,'issue_select'=>$issue]);
@@ -55,6 +56,7 @@ class RecordController extends Controller
     {
         $record = new Record();
         $record->user_id = Auth::user()->id;
+        $record->topic_id = $request->input('topic_id');
         $record->client_id = $request->input('client_id');
         $record->issue_id = $request->input('issue_id');
         $record->category_id= $request->input('category_id');

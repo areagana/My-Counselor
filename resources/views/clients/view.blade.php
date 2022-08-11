@@ -74,7 +74,7 @@
             </div>
         </div>
         <div class="row p-2">
-            <div class="col p-2">
+            <div class="col-md-4 p-2">
                 <h5 class="header">Issues
                     <span class="right">
                         <a href="issue/create" class="nav-link right">
@@ -125,7 +125,11 @@
                 </h5>
                     <div class="p-2">
                         <div class="p-2">
-                            <h5 class='header'>Notes</h5>
+                            <h5 class='header p-2'>Notes
+                                <span class="right">
+                                    <button class="btn btn-outline-danger btn-sm sub-issue-content" data-title="{{session('issue_select')->issue_title}}" data-issue="{{session('issue_select')->id}}"><i class="fa fa-plus"></i> Section</button>
+                                </span>
+                            </h5>
                             @foreach(session('issue_select')->records as $record)
                                 <div class="p-2">
                                     {!! $record->shared_info !!}
@@ -140,6 +144,15 @@
                                 <input type="hidden" name='client_id' value="{{$client->id}}">
                                 <input type="hidden" name='category_id' value="{{$client->category_id}}">
                                 <input type="hidden" name='issue_id' value="{{session('issue_select')->id}}">
+                                <div class="form-group">
+                                    <label class='form-label' for="topic_id">Topic</label>
+                                    <select name="topic_id" id="topic_id" class='form-control'>
+                                        <option value=""> Select</option>
+                                        @foreach(session('issue_select')->topics as $topic)
+                                            <option value="{{$topic->id}}">{{$topic->title}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             <div class="form-group">
                                 <label for="" class="form-label">Key points</label>
                                 <textarea type="text" class="form-control" name='issue_details' id='new-record-text'></textarea>
@@ -188,6 +201,7 @@
                                         <div class='modal-body'>
                                             <form action="{{route('record.update',$record->id)}}" method='POST' id='edit-record{{$record->id}}'>
                                                 @csrf
+                                                
                                                 <div class="form-group">
                                                     <input type="hidden" name='client_id' value='{{$client->id}}'>
                                                     <label for="shared_info" class="form-label">Key Points</label>
@@ -212,5 +226,37 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- modal -->
+<div class="modal fade" id="sub-issue" tabindex="-1"  data-backdrop='static' role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sub_issue_title"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{{route('subissueStore')}}" method='POST' id='subIssue-form'>
+            @csrf
+            <div class="form-group">
+                <label for="details">Title</label>
+                <input type="hidden" name="issue_id" id='issue_id_subissue'>
+                <input type="text" name ='title' id='title' class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="details">Details</label>
+                <textarea type="text" name ='details' id='details' class="form-control" required></textarea>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" form='subIssue-form'>Save changes</button>
+      </div>
+    </div>
+  </div>
 </div>
 @endsection

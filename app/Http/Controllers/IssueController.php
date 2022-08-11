@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Client;
 use App\Models\Issue;
 use App\Models\Category;
+use App\Models\IssueTopic;
 
 use Illuminate\Http\Request;
 
@@ -135,6 +136,21 @@ class IssueController extends Controller
              */
             return response()->json(['issues'=>$issues,'clients'=>$clients]);
         }
+    }
+
+    // store subissue
+    public function subIssueStore(Request $request)
+    {
+        $issue_id = $request->input('issue_id');
+        $issue = Issue::find($issue_id);
+
+        $topic = new IssueTopic();
+        $topic->issue_id = $issue->id;
+        $topic->title = $request->input('title');
+        $topic->details = $request->input('details');
+
+        $topic->save();
+        return redirect()->back();
     }
 
     /**

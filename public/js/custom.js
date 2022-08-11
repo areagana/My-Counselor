@@ -694,3 +694,13 @@ $(document).on('blur','#current-password',function(){
             // show the save button
             $('#save_button').show();
         }
+
+    // add issue sub content function
+    $('.sub-issue-content').on('click',function(){
+        var id = $(this).data('issue');
+        var title = $(this).data('title');
+        console.log(id);
+        $('#sub-issue').modal('show');
+        $('#issue_id_subissue').val(id);
+        $('#sub_issue_title').text(title);
+    });

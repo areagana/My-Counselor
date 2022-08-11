@@ -83,6 +83,7 @@ Route::get('/categories/{id}/clients','ClientController@category')->name('catego
 
 // records routes
 Route::get('/records','RecordController@index')->name('records');
+Route::post('/subissue/store','IssueController@subIssueStore')->name('subissueStore');
 
 // ajax call routes
 Route::get('/search','AjaxController@search')->name('search');
