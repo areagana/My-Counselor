@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Requests;
+use App\Http\Controllers\Auth\RegisterController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,20 +16,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/*Route::get('/', function () {
-    return route('login');//auth.login
-});*/
+// Route::get('/', function () {
+//     return route('login');//auth.login
+// });
 
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
+Route::post('/user/create','UserController@store')->name('newUser');
 Route::get('/profile', 'ProfileController@profile')->name('profile');
 Route::post('/profile/update', 'ProfileController@profileUpdate')->name('profile.update');
 Route::post('/profile/{id}/update', 'ImageController@UserProfileImageUpdate')->name('profileImage.update');
 Route::get('/profile/passwordchange', 'ProfileController@passwordChange')->name('passwordchange');
 
 // users routes
-Route::get('/users','HomeController@users')->name('users');
+Route::get('/users','UserController@index')->name('users');
+Route::get('/users/register','UserController@create')->name('users.create');
 // clients Routes
 Route::get('/clients','ClientController@index')->name('clients');
 Route::get('/client/{id}/view','ClientController@show')->name('client.view');

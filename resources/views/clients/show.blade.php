@@ -43,6 +43,7 @@
                                 <td>
                                     <i class="fa fa-ellipsis-v btn btn-sm btn-circle btn-light" onclick="showForm('client_{{$client->id}}')"></i>
                                     <div class="p-2 bg-white shadow more-info-toggle" id='client_{{$client->id}}'>
+                                        <a href="{{route('client.edit',$client->id)}}" class="nav-link">Edit</a>
                                         <a href="{{url('/client/'.$client->id.'/view')}}" class="nav-link">Records</a>
                                         <a href="{{route('client.schedules',$client->id)}}" class="nav-link">Schedules</a>
                                         <a href="{{route('client.profile',$client->id)}}" class="nav-link">Profile</a>

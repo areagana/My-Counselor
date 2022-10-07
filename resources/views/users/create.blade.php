@@ -8,7 +8,7 @@
             <h3 class='header'>
                 Users
                 <span class='right'>
-                    <a href='{{route('register')}}' class='nav-link'>
+                    <a href="{{route('users.create')}}" class='nav-link'>
                         <button class='btn btn-sm btn-success'><i class='fa fa-plus-circle'></i> Users</button>
                     </a>
                 </span>

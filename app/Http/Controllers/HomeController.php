@@ -12,17 +12,16 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Display a listing of the resource.
      *
-     * @return void
+     * @return \Illuminate\Http\Response
      */
     public function __construct()
     {
-        $this->middleware(['auth','role:superadministrator|counsellor']);
+        $this->middleware(['auth','role:superadministrator|counsellor|user']);
     }
 
-    /**
-     * Show the application dashboard.
+    /* Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
@@ -36,21 +35,6 @@ class HomeController extends Controller
     }
     
     /**
-     * Users
-     */
-    
-    public function users()
-    {
-        if(Auth::user()->hasRole('superadministrator'))
-        {
-            $users = User::all();
-            return view('users.create',compact('users'));
-        }else{
-            return redirect()->back();
-        }
-    }
-
-    /**
      * function to generate reports 
      */
     public function reports()
@@ -63,4 +47,5 @@ class HomeController extends Controller
         $categories = $user->categories;
         return view('records.report',compact(['issues','categories','statuses']));
     }
+
 }

@@ -46,7 +46,11 @@
                         <li class="nav-item">
                             <a href="/reports" class="nav-link">Reports</a>
                         </li>
-                        
+                        @if(Auth::user()->hasRole('superadministrator'))
+                        <li class="nav-item">
+                            <a href="/users" class="nav-link">Users</a>
+                        </li>
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->
