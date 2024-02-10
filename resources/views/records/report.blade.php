@@ -6,16 +6,14 @@
     <div class="container">
         <div class="h4 p-3 header bg-white">Reports
             <span class="right h6">
-                <a href="" class="nav-link btn btn-outline-primary btn-sm"><i class="fa fa-print"></i> Print</a>
+                <a href="/reportGeneral" class="btn btn-outline-primary btn-sm btn-flat"><i class="fa fa-file"></i> General Report</a>
+                <a href="#" class="btn btn-outline-danger btn-sm"><i class="fa fa-print"></i> Print</a>
             </span>
         </div>
         <div class="p-2 bg-white mt-1">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
                     <a href="#issues" class="nav-link" data-toggle='tab'>Issues</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#clients" class="nav-link" data-toggle='tab'>Clients</a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -51,9 +49,6 @@
 
                         </div>
                     </div>
-                </div>
-                <div class="tab-pane p-2 mt-2" id="clients">
-                    Clients
                 </div>
             </div>
         </div>

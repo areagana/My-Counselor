@@ -46,7 +46,7 @@ Route::get('/clients/{id}/schedules','ClientController@schedules')->name('client
 // background routes
 Route::get('client/{id}/background/create','BackgroundController@create')->name('client.background');
 Route::post('client/background/store','BackgroundController@store')->name('background.store');
-Route::post('client/{id}/otherinfo/store','backgroundController@otherInfoStore')->name('backgroundInfo');
+Route::post('client/{id}/otherinfo/store','BackgroundController@otherInfoStore')->name('backgroundInfo');
 
 //schedule routes
 Route::get('/schedule','ScheduleController@index')->name('schedule');
@@ -107,3 +107,5 @@ Route::prefix('profile_image_url')->group(function () {
  * report data routes
  */
 Route::get('/issues/get','IssueController@fetchIssues')->name('issues.find');
+Route::get('/reportGeneral','ReportController@generalReport')->name('reportGeneral');
+Route::get('/convertToWord','ReportController@convertToWord')->name('convertToWord');

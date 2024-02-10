@@ -29,6 +29,10 @@
                         <input type="text" class="form-control" name='age' id='age' autocomplete='off' required>
                     </div>
                     <div class="form-group">
+                        <label for="class" class="form-label">Class</label>
+                        <input type="text" class="form-control" name='class' id='class' autocomplete='off' required>
+                    </div>
+                    <div class="form-group">
                         <label for="category" class="form-label">Category</label>
                         <select name="category" id="category" class="custom-select">
                             <option value="" hidden>Select </option>

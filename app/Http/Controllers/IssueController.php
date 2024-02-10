@@ -138,6 +138,11 @@ class IssueController extends Controller
         }
     }
 
+    public function generaReport(Request $request)
+    {
+        
+    }
+
     // store subissue
     public function subIssueStore(Request $request)
     {

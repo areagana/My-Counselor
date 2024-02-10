@@ -49,6 +49,10 @@
                         <input type="text" class="form-control" name='age' id='age' value='{{$client->age}}' required>
                     </div>
                     <div class="form-group">
+                        <label for="class" class="form-label">Class</label>
+                        <input type="text" class="form-control" name='class' id='class' value='{{$client->class}}' autocomplete='off' required>
+                    </div>
+                    <div class="form-group">
                         <label for="category" class="form-label">Category</label>
                         <select name="category" id="category" class="custom-select" value=''>
                             <option value="{{$client->category_id}}" hidden>{{$category_client->category_name}}</option>

@@ -54,6 +54,7 @@ class ClientController extends Controller
         $client->name = $request->input('name');
         $client->gender =  $request->input('gender');
         $client->age =  $request->input('age');
+        $client->class = $request->input('class');
         $client->category_id =  $request->input('category');
         $client->user_id = Auth::user()->id;
         $client->save();
@@ -118,6 +119,7 @@ class ClientController extends Controller
             $client->name = $request->input('name');
             $client->gender =  $request->input('gender');
             $client->age =  $request->input('age');
+            $client->class =  $request->input('class');
             $client->category_id =  $request->input('category');
             $client->contact =  $request->input('contact');
             $client->email =  $request->input('email');  

@@ -115,6 +115,29 @@ $(document).on('click','.schedule-id',function(){
         }
     });
 })
+
+function printMe(divName) {
+    var printContents = document.getElementById(divName).innerHTML;
+    var originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = printContents;
+
+    window.print();
+    document.body.innerHTML = originalContents;
+}
+
+function printPage(id){
+    var html="<html>";
+    html+= document.getElementById(id).innerHTML;
+    html+="</html>";
+    var printWin = window.open('1','','left=1,top=0,width=0,height=0,toolbar=0,scrollbars=1,status =0');
+    printWin.document.write(html);
+    printWin.document.close();
+    printWin.focus();
+    printWin.print();
+    printWin.close();
+
+  }
 // set time interval 
 //setInterval(function(){$('#schedules').html(schedules());}, 1000);
 var now = new Date();
@@ -483,7 +506,7 @@ $(document).on('blur','#current-password',function(){
  /**
   * generate report functions
   */
-  function checkDate(dat1,dat2)
+        function checkDate(dat1,dat2)
         {        
             if(dat1 !='' && dat2 !='')
             {
@@ -491,7 +514,8 @@ $(document).on('blur','#current-password',function(){
                 if(dat1 > dat2){
                     alert('Start date cannot be greater than end Date. Please check your date and try again.')
                 }else{
-                    fetchIssues(dat1,dat2)
+                    fetchIssues(dat1,dat2);
+                    fetchIssues2(dat1,dat2);
                 }
             }
         }
@@ -526,7 +550,68 @@ $(document).on('blur','#current-password',function(){
                 }
             });
         }
+
+        function fetchIssues2(dat1,dat2)
+        {
+            $.ajax({
+                url:'/issues/get',
+                data:{
+                    date1:dat1,
+                    date2:dat2
+                },
+                beforeSend:function(){
+                    $('.results').html("<div class='h4 p-4'><i><center>Loading...</center></i></div>");
+                },
+                success:function(res){
+                    var data ="";
+                    if(res.issues.length > 0){  
+                        // add table
+                        var table = "<h2><center>COUNSELING REPORT FOR THE DATES BETWEEN "+dat1+" AND "+dat1+"</center></h2>";
+                         table += "<table class='table table-bordered'><thead><tr><th>Date</th><th>Name</th><th>Class</th><th>Issue</th><th>Sharing</th><th>Wayfoward</th><tr></thead><tbody>";
+                                $.each(res.issues,function(index,issue){
+                                    console.log(issue.records.length);
+                                    var rows = issue.records.length+1;
+                                    table += "<tr>"+
+                                                "<td rowspan='"+rows+"'>"+formatDate(issue.updated_at)+"</td>"+
+                                                "<td rowspan='"+rows+"'>"+issue.client.name+"</td>"+
+                                                "<td rowspan='"+rows+"'>"+issue.client.class+"</td>"+
+                                                "<td rowspan='"+rows+"'>"+issue.issue_title+"</td>"+
+                                             "</tr>";
+
+                                                $.each(issue.records,function(index,rc){
+                                                    table+="<tr>"+
+                                                                "<td >"+rc.shared_info+"</td>"+
+                                                                "<td >"+rc.progress+"</td>"+
+                                                            "</tr>";
+                                                });
+                                               
+                                });
+
+                            table +='</table>';
+                        $('.results').html(table);
+                    }else{
+                        $('.results').html("<div class='h4 p-4'><i><center>No data found</center></i></div>");
+                    }
+                },
+                error:function(error){
+                    $('.results').html("<div class='h4 p-4'><i><center>Error Loading requested data</center></i></div>");
+                }
+            });
+        }
         
+        //format date
+        function formatDate(dateD)
+        {
+            const date = new Date(dateD);
+
+            // Format the date according to Africa/Nairobi timezone
+            const formattedDate = date.toLocaleDateString('en-US', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
+              });
+            return formattedDate;
+        }
         /**
          * fetch data basing on the category selected
          */
@@ -622,6 +707,152 @@ $(document).on('blur','#current-password',function(){
             }
         }
 
+        function fetchIssuesStatus2(status)
+        {
+            var dat1 = $('#start_date').val();
+            var dat2 = $('#end_date').val();
+            var id = $('#category_name').val();
+
+            if(dat1 !='' && dat2 !='' && id !='')
+            {
+                $.ajax({
+                    url:'/issues/get',
+                    data:{
+                        date1:dat1,
+                        date2:dat2,
+                        id:id,
+                        status:status
+                    },
+                    beforeSend:function(){
+                        $('.results').html("<div class='h4 p-4'><i><center>Loading...</center></i></div>");
+                    },
+                    success:function(res){
+                        var data ="";
+                        if(res.issues.length > 0){                        
+                             // add table
+                             var table = "<h2><center>COUNSELING REPORT FOR THE DATES BETWEEN "+dat1+" AND "+dat1+"</center></h2>";
+                                table += "<table class='table table-bordered'><thead><tr><th>Date</th><th>Name</th><th>Class</th><th>Issue</th><th>Sharing</th><th>Wayfoward</th><tr></thead><tbody>";
+                                $.each(res.issues,function(index,issue){
+                                    var rows = issue.records.length+1;
+                                    table += "<tr>"+
+                                                "<td rowspan='"+rows+"'>"+formatDate(issue.updated_at)+"</td>"+
+                                                "<td rowspan='"+rows+"'>"+issue.client.name+"</td>"+
+                                                "<td rowspan='"+rows+"'>"+issue.client.class+"</td>"+
+                                                "<td rowspan='"+rows+"'>"+issue.issue_title+"</td>"+
+                                            "</tr>";
+
+                                                $.each(issue.records,function(index,rc){
+                                                    table+="<tr>"+
+                                                                "<td >"+rc.shared_info+"</td>"+
+                                                                "<td >"+rc.progress+"</td>"+
+                                                            "</tr>";
+                                                });
+                                            
+                                });
+
+                                table +='</table>';
+                            $('.results').html(table);
+                        }else{
+                            $('.results').html("<div class='h4 p-4'><i><center>No data found</center></i></div>");
+                        }
+                    },
+                    error:function(error){
+                        $('.results').html("<div class='h4 p-4'><i><center>Error Loading requested data</center></i></div>");
+                    }
+                });
+            }else if(id !='' && (dat1 =='' || dat2 =='')){
+                $.ajax({
+                    url:'/issues/get',
+                    data:{
+                        id:id,
+                        status:status
+                    },
+                    beforeSend:function(){
+                        $('.results').html("<div class='h4 p-4'><i><center>Loading...</center></i></div>");
+                    },
+                    success:function(res){
+                        var data ="";
+                        if(res.issues.length > 0){ 
+                             // add table
+                             var table = "<h2><center>COUNSELING REPORT FOR THE DATES BETWEEN "+dat1+" AND "+dat1+"</center></h2>";
+                                table += "<table class='table table-bordered'><thead><tr><th>Date</th><th>Name</th><th>Class</th><th>Issue</th><th>Sharing</th><th>Wayfoward</th><tr></thead><tbody>";
+
+                                $.each(res.issues,function(index,issue){
+                                    console.log(issue.records.length);
+                                    var rows = issue.records.length+1;
+                                    table += "<tr>"+
+                                                "<td rowspan='"+rows+"'>"+formatDate(issue.updated_at)+"</td>"+
+                                                "<td rowspan='"+rows+"'>"+issue.client.name+"</td>"+
+                                                "<td rowspan='"+rows+"'>"+issue.client.class+"</td>"+
+                                                "<td rowspan='"+rows+"'>"+issue.issue_title+"</td>"+
+                                            "</tr>";
+
+                                                $.each(issue.records,function(index,rc){
+                                                    table+="<tr>"+
+                                                                "<td >"+rc.shared_info+"</td>"+
+                                                                "<td >"+rc.progress+"</td>"+
+                                                            "</tr>";
+                                                });
+                                            
+                                });
+
+                                table +='</table>';
+                            $('.results').html(table);
+                        }else{
+                            $('.results').html("<div class='h4 p-4'><i><center>No data found</center></i></div>");
+                        }
+                    },
+                    error:function(error){
+                        $('.results').html("<div class='h4 p-4'><i><center>Error Loading requested data</center></i></div>");
+                    }
+                });
+               
+            }else{
+                $.ajax({
+                    url:'/issues/get',
+                    data:{
+                        status:status
+                    },
+                    beforeSend:function(){
+                        $('.results').html("<div class='h4 p-4'><i><center>Loading...</center></i></div>");
+                    },
+                    success:function(res){
+                        var data ="";
+                        if(res.issues.length > 0){ 
+                             // add table
+                                var table = "<h2><center>COUNSELING REPORT FOR THE DATES BETWEEN "+dat1+" AND "+dat1+"</center></h2>";
+                                table += "<table class='table table-bordered'><thead><tr><th>Date</th><th>Name</th><th>Class</th><th>Issue</th><th>Sharing</th><th>Wayfoward</th><tr></thead><tbody>";
+                                $.each(res.issues,function(index,issue){
+                                    var rows = issue.records.length+1;
+                                    table += "<tr>"+
+                                                "<td rowspan='"+rows+"'>"+formatDate(issue.updated_at)+"</td>"+
+                                                "<td rowspan='"+rows+"'>"+issue.client.name+"</td>"+
+                                                "<td rowspan='"+rows+"'>"+issue.client.class+"</td>"+
+                                                "<td rowspan='"+rows+"'>"+issue.issue_title+"</td>"+
+                                            "</tr>";
+
+                                                $.each(issue.records,function(index,rc){
+                                                    table+="<tr>"+
+                                                                "<td >"+rc.shared_info+"</td>"+
+                                                                "<td >"+rc.progress+"</td>"+
+                                                            "</tr>";
+                                                });
+                                            
+                                });
+
+                                table +='</table>';
+                            $('.results').html(table);
+                        }else{
+                            $('.results').html("<div class='h4 p-4'><i><center>No data found</center></i></div>");
+                        }
+                    },
+                    error:function(error){
+                        $('.results').html("<div class='h4 p-4'><i><center>Error Loading requested data</center></i></div>");
+                    }
+                });
+            }
+        }
+
         /**
          * fetch issues basing on issue title
          */
@@ -683,7 +914,114 @@ $(document).on('blur','#current-password',function(){
             }
         }
 
+        function fetchIssuesCategory2(id)
+        {
+            var dat1 = $('#start_date').val();
+            var dat2 = $('#end_date').val();
+            
+            
+            if(dat1 !='' && dat2 !='')
+            {
+                $.ajax({
+                    url:'/issues/get',
+                    data:{
+                        date1:dat1,
+                        date2:dat2,
+                        id:id
+                    },
+                    beforeSend:function(){
+                        $('.results').html("<div class='h4 p-4'><i><center>Loading...</center></i></div>");
+                    },
+                    success:function(res){
+                        var data ="";
+                        if(res.issues.lenth > 0){                        
+                           // add table
+                           var table = "<h2><center>COUNSELING REPORT FOR THE DATES BETWEEN "+dat1+" AND "+dat1+"</center></center></h2>";
+                            table += "<table class='table table-bordered'><thead><tr><th>Date</th><th>Name</th><th>Class</th><th>Issue</th><th>Sharing</th><th>Wayfoward</th><tr></thead><tbody>";
+                            $.each(res.issues,function(index,issue){
+                                var rows = issue.records.length+1;
+                                table += "<tr>"+
+                                            "<td rowspan='"+rows+"'>"+formatDate(issue.updated_at)+"</td>"+
+                                            "<td rowspan='"+rows+"'>"+issue.client.name+"</td>"+
+                                            "<td rowspan='"+rows+"'>"+issue.client.class+"</td>"+
+                                            "<td rowspan='"+rows+"'>"+issue.issue_title+"</td>"+
+                                        "</tr>";
 
+                                            $.each(issue.records,function(index,rc){
+                                                table+="<tr>"+
+                                                            "<td >"+rc.shared_info+"</td>"+
+                                                            "<td >"+rc.progress+"</td>"+
+                                                        "</tr>";
+                                            });
+                                        
+                            });
+
+                            table +='</table>';
+                            $('.results').html(table);
+                        }else{
+                            $('.results').html("<div class='h4 p-4'><i><center>No data found</center></i></div>");
+                        }
+                    },
+                    error:function(error){
+                        $('.results').html("<div class='h4 p-4'><i><center>Error Loading requested data</center></i></div>");
+                    }
+                });
+            }else{
+                $.ajax({
+                    url:'/issues/get',
+                    data:{
+                        id:id
+                    },
+                    beforeSend:function(){
+                        $('.results').html("<div class='h4 p-4'><i><center>Loading...</center></i></div>");
+                    },
+                    success:function(res){
+                        // add table
+                        var table = "<h2><center>COUNSELING REPORT</center></center></h2>";
+                         table += "<table class='table table-bordered'><thead><tr><th>Date</th><th>Name</th><th>Class</th><th>Issue</th><th>Sharing</th><th>Wayfoward</th><tr></thead><tbody>";
+                        $.each(res.issues,function(index,issue){
+                            var rows = issue.records.length+1;
+                            table += "<tr>"+
+                                        "<td rowspan='"+rows+"'>"+formatDate(issue.updated_at)+"</td>"+
+                                        "<td rowspan='"+rows+"'>"+issue.client.name+"</td>"+
+                                        "<td rowspan='"+rows+"'>"+issue.client.class+"</td>"+
+                                        "<td rowspan='"+rows+"'>"+issue.issue_title+"</td>"+
+                                    "</tr>";
+
+                                        $.each(issue.records,function(index,rc){
+                                            table+="<tr>"+
+                                                        "<td >"+rc.shared_info+"</td>"+
+                                                        "<td >"+rc.progress+"</td>"+
+                                                    "</tr>";
+                                        });
+                                    
+                        });
+
+                        table +='</table>';
+                    $('.results').html(table);
+                    },
+                    error:function(error){
+                        $('.results').html("<div class='h4 p-4'><i><center>Error Loading requested data</center></i></div>");
+                    }
+                });
+            }
+        }
+
+        // convert document to word
+        function getWord()
+        {
+                var dat1 = $('#start_date').val();
+                var dat2 = $('#end_date').val();
+                var cat = $('#category_name').val();
+                // alert(dat1);
+                if(dat1 !='' && dat2 !='')
+                {
+                    window.location.href='/convertToWord?date1='+dat1+'&date2='+dat2;
+                }else{
+                    window.location.href='/convertToWord?id='+cat;
+                }
+            
+        }
         // add background information to the students details
         function AddBackgroundInfo()
         {
